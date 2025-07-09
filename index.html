@@ -30,6 +30,9 @@
         <button id="buy-pickaxe" style="display:none">Buy Pickaxe (Cost 10 Gold)</button>
         <button id="hire-worker" style="display:none">Hire Worker (Cost 25 Gold)</button>
     </div>
+    <div id="win-message" style="display:none; margin-top:20px; font-size:24px;">
+        <p>🎉 <strong>YOU WON!</strong> 🎉</p>
+    </div>
     <script>
         const goldDisplay = document.getElementById('gold');
         const goldRateDisplay = document.getElementById('gold-rate');
@@ -44,6 +47,7 @@
         let pickaxeCost = 10;
         let workerHired = false;
         let autoRate = 0;
+        let won = false;
 
         const rechargeTime = 500; // milliseconds
 
@@ -54,6 +58,12 @@
             buyPickaxeBtn.disabled = gold < pickaxeCost;
             if (gold >= 5 || pickaxeLevel > 0) {
                 buyPickaxeBtn.style.display = 'inline';
+            }
+
+            if (!won && gold >= 100) {
+                won = true;
+                document.getElementById('win-message').style.display = 'block';
+                document.getElementById('controls').style.display = 'none';
             }
         }
 
