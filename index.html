@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Gold Counter</title>
+</head>
+<body>
+    <h1>Gold: <span id="gold">0</span></h1>
+    <button id="find-gold">Find Gold</button>
+    <button id="buy-pickaxe" style="display:none">Buy Pickaxe (Cost 10 Gold)</button>
+<script>
+        const goldDisplay = document.getElementById('gold');
+        const findGoldBtn = document.getElementById('find-gold');
+        const buyPickaxeBtn = document.getElementById('buy-pickaxe');
+
+        let gold = 0;
+        let increment = 1;
+        let pickaxePurchased = false;
+
+        findGoldBtn.addEventListener('click', () => {
+            gold += increment;
+            goldDisplay.textContent = gold;
+
+            if (gold >= 10 && !pickaxePurchased) {
+                buyPickaxeBtn.style.display = 'inline';
+            }
+        });
+
+        buyPickaxeBtn.addEventListener('click', () => {
+            if (gold >= 10 && !pickaxePurchased) {
+                gold -= 10;
+                goldDisplay.textContent = gold;
+                pickaxePurchased = true;
+                increment = 2;
+                buyPickaxeBtn.disabled = true;
+            }
+        });
+    </script>
+</body>
+</html>
