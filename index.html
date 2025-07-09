@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Counter</title>
+</head>
+<body>
+    <h1 id="counter">0</h1>
+    <button id="increment">Increment</button>
+
+    <script>
+        const counter = document.getElementById('counter');
+        document.getElementById('increment').addEventListener('click', () => {
+            let value = parseInt(counter.textContent, 10);
+            counter.textContent = value + 1;
+        });
+    </script>
+</body>
+</html>
