@@ -12,6 +12,7 @@
             padding-top: 50px;
             min-height: 100vh;
             background: linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%);
+            background-attachment: fixed;
         }
 
         button {
@@ -19,8 +20,13 @@
             padding: 10px 20px;
             border: none;
             border-radius: 4px;
-            background-color: #fff;
+            background: linear-gradient(180deg, #ffffff, #e0e0e0);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
             cursor: pointer;
+        }
+
+        button:active {
+            transform: scale(0.98);
         }
 
         #recharge-bar {
