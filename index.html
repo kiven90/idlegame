@@ -3,21 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <title>Gold Counter</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        button {
+            margin: 5px;
+            padding: 10px 20px;
+        }
+
+        #recharge-bar {
+            width: 200px;
+            margin: 10px auto;
+            display: block;
+        }
+    </style>
 </head>
 <body>
-    <h1>Gold: <span id="gold">0</span></h1>
-    <button id="find-gold">Find Gold</button>
-    <progress id="recharge-bar" value="0" max="100" style="display:none"></progress>
-    <button id="buy-pickaxe" style="display:none">Buy Pickaxe (Cost 10 Gold)</button>
+    <h1>Gold: <span id="gold">0</span> (<span id="gold-rate">0</span>/s)</h1>
+    <div id="controls">
+        <button id="find-gold">Find Gold</button>
+        <progress id="recharge-bar" value="0" max="100" style="display:none"></progress>
+        <button id="buy-pickaxe" style="display:none">Buy Pickaxe (Cost 10 Gold)</button>
+        <button id="hire-worker" style="display:none">Hire Worker (Cost 25 Gold)</button>
+    </div>
     <script>
         const goldDisplay = document.getElementById('gold');
+        const goldRateDisplay = document.getElementById('gold-rate');
         const findGoldBtn = document.getElementById('find-gold');
         const rechargeBar = document.getElementById('recharge-bar');
         const buyPickaxeBtn = document.getElementById('buy-pickaxe');
+        const hireWorkerBtn = document.getElementById('hire-worker');
 
         let gold = 0;
         let increment = 1;
         let pickaxePurchased = false;
+        let workerHired = false;
+        let autoRate = 0;
+
+        const rechargeTime = 1000; // milliseconds
+
+        function updateDisplays() {
+            goldDisplay.textContent = gold;
+            goldRateDisplay.textContent = autoRate;
+        }
+
+        function startRecharge() {
+            findGoldBtn.disabled = true;
+            rechargeBar.style.display = 'inline';
+            rechargeBar.value = 0;
+            const interval = 50;
+            const step = (interval / rechargeTime) * 100;
+            const timer = setInterval(() => {
+                rechargeBar.value += step;
+                if (rechargeBar.value >= 100) {
+                    clearInterval(timer);
+                    rechargeBar.style.display = 'none';
+                    findGoldBtn.disabled = false;
+                }
+            }, interval);
+        }
 
         const rechargeTime = 1000; // milliseconds
 
@@ -41,22 +89,45 @@
             if (findGoldBtn.disabled) return;
             startRecharge();
             gold += increment;
-            goldDisplay.textContent = gold;
+            updateDisplays();
 
             if (gold >= 10 && !pickaxePurchased) {
                 buyPickaxeBtn.style.display = 'inline';
+            }
+            if (gold >= 25 && !workerHired) {
+                hireWorkerBtn.style.display = 'inline';
             }
         });
 
         buyPickaxeBtn.addEventListener('click', () => {
             if (gold >= 10 && !pickaxePurchased) {
                 gold -= 10;
-                goldDisplay.textContent = gold;
+                updateDisplays();
                 pickaxePurchased = true;
                 increment = 2;
                 buyPickaxeBtn.disabled = true;
             }
         });
+
+        hireWorkerBtn.addEventListener('click', () => {
+            if (gold >= 25 && !workerHired) {
+                gold -= 25;
+                workerHired = true;
+                autoRate = 1;
+                updateDisplays();
+                hireWorkerBtn.style.display = 'none';
+            }
+        });
+
+        setInterval(() => {
+            if (autoRate > 0) {
+                gold += autoRate;
+                updateDisplays();
+                if (gold >= 10 && !pickaxePurchased) {
+                    buyPickaxeBtn.style.display = 'inline';
+                }
+            }
+        }, 1000);
     </script>
 </body>
 </html>
