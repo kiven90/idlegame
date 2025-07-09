@@ -7,17 +7,39 @@
 <body>
     <h1>Gold: <span id="gold">0</span></h1>
     <button id="find-gold">Find Gold</button>
+    <progress id="recharge-bar" value="0" max="100" style="display:none"></progress>
     <button id="buy-pickaxe" style="display:none">Buy Pickaxe (Cost 10 Gold)</button>
     <script>
         const goldDisplay = document.getElementById('gold');
         const findGoldBtn = document.getElementById('find-gold');
+        const rechargeBar = document.getElementById('recharge-bar');
         const buyPickaxeBtn = document.getElementById('buy-pickaxe');
 
         let gold = 0;
         let increment = 1;
         let pickaxePurchased = false;
 
+        const rechargeTime = 1000; // milliseconds
+
+        function startRecharge() {
+            findGoldBtn.disabled = true;
+            rechargeBar.style.display = 'inline';
+            rechargeBar.value = 0;
+            const interval = 50;
+            const step = (interval / rechargeTime) * 100;
+            const timer = setInterval(() => {
+                rechargeBar.value += step;
+                if (rechargeBar.value >= 100) {
+                    clearInterval(timer);
+                    rechargeBar.style.display = 'none';
+                    findGoldBtn.disabled = false;
+                }
+            }, interval);
+        }
+
         findGoldBtn.addEventListener('click', () => {
+            if (findGoldBtn.disabled) return;
+            startRecharge();
             gold += increment;
             goldDisplay.textContent = gold;
 
