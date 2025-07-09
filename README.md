@@ -10,3 +10,6 @@ ready.
 Upon reaching 25 gold you can hire a worker who automatically generates
 one gold every second. The current gold per second rate is shown next to
 the gold counter.
+
+When you accumulate 100 gold a celebratory "YOU WON" message appears to
+let you know you've finished the game.
