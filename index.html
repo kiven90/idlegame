@@ -63,6 +63,37 @@
         let autoRate = 0;
         let won = false;
 
+        function loadState() {
+            const saved = localStorage.getItem('idleGameState');
+            if (saved) {
+                try {
+                    const s = JSON.parse(saved);
+                    gold = s.gold ?? gold;
+                    increment = s.increment ?? increment;
+                    pickaxeLevel = s.pickaxeLevel ?? pickaxeLevel;
+                    pickaxeCost = s.pickaxeCost ?? pickaxeCost;
+                    workerHired = s.workerHired ?? workerHired;
+                    autoRate = s.autoRate ?? autoRate;
+                    won = s.won ?? won;
+                } catch (e) {
+                    console.error('Failed to load saved state', e);
+                }
+            }
+        }
+
+        function saveState() {
+            const s = {
+                gold,
+                increment,
+                pickaxeLevel,
+                pickaxeCost,
+                workerHired,
+                autoRate,
+                won
+            };
+            localStorage.setItem('idleGameState', JSON.stringify(s));
+        }
+
         const rechargeTime = 500; // milliseconds
 
         function updateDisplays() {
@@ -75,13 +106,24 @@
                     buyPickaxeBtn.style.display = 'inline';
                 }
 
+                if (!workerHired && gold >= 25) {
+                    hireWorkerBtn.style.display = 'inline';
+                }
+
                 if (gold >= 100) {
                     won = true;
-                    document.getElementById('win-message').style.display = 'block';
-                    document.getElementById('controls').remove();
-                    document.getElementById('gold-indicator').remove();
                 }
             }
+
+            if (won) {
+                document.getElementById('win-message').style.display = 'block';
+                const controls = document.getElementById('controls');
+                if (controls) controls.remove();
+                const indicator = document.getElementById('gold-indicator');
+                if (indicator) indicator.remove();
+            }
+
+            saveState();
         }
 
         function startRecharge() {
@@ -138,8 +180,10 @@
             }
         }, 1000);
 
-        // Initialize displays on page load
+        // Initialize displays on page load and persist on exit
+        loadState();
         updateDisplays();
+        window.addEventListener('beforeunload', saveState);
     </script>
 </body>
 </html>
