@@ -68,7 +68,7 @@
         function updateDisplays() {
             goldDisplay.textContent = gold;
             goldRateDisplay.textContent = autoRate;
-            buyPickaxeBtn.textContent = `Buy Pickaxe (Cost ${pickaxeCost} Gold)`;
+            buyPickaxeBtn.textContent = `Buy Pickaxe #${pickaxeLevel + 1} (Cost ${pickaxeCost} Gold)`;
             buyPickaxeBtn.disabled = gold < pickaxeCost;
             if (gold >= 5 || pickaxeLevel > 0) {
                 buyPickaxeBtn.style.display = 'inline';
