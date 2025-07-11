@@ -37,7 +37,7 @@
     </style>
 </head>
 <body>
-    <h1>Gold: <span id="gold">0</span> (<span id="gold-rate">0</span>/s)</h1>
+    <h1 id="gold-indicator">Gold: <span id="gold">0</span> (<span id="gold-rate">0</span>/s)</h1>
     <div id="controls">
         <button id="find-gold">Find Gold</button>
         <progress id="recharge-bar" value="0" max="100" style="display:none"></progress>
@@ -66,18 +66,21 @@
         const rechargeTime = 500; // milliseconds
 
         function updateDisplays() {
-            goldDisplay.textContent = gold;
-            goldRateDisplay.textContent = autoRate;
-            buyPickaxeBtn.textContent = `Buy Pickaxe #${pickaxeLevel + 1} (Cost ${pickaxeCost} Gold)`;
-            buyPickaxeBtn.disabled = gold < pickaxeCost;
-            if (gold >= 5 || pickaxeLevel > 0) {
-                buyPickaxeBtn.style.display = 'inline';
-            }
+            if (!won) {
+                goldDisplay.textContent = gold;
+                goldRateDisplay.textContent = autoRate;
+                buyPickaxeBtn.textContent = `Buy Pickaxe #${pickaxeLevel + 1} (Cost ${pickaxeCost} Gold)`;
+                buyPickaxeBtn.disabled = gold < pickaxeCost;
+                if (gold >= 5 || pickaxeLevel > 0) {
+                    buyPickaxeBtn.style.display = 'inline';
+                }
 
-            if (!won && gold >= 100) {
-                won = true;
-                document.getElementById('win-message').style.display = 'block';
-                document.getElementById('controls').style.display = 'none';
+                if (gold >= 100) {
+                    won = true;
+                    document.getElementById('win-message').style.display = 'block';
+                    document.getElementById('controls').remove();
+                    document.getElementById('gold-indicator').remove();
+                }
             }
         }
 
